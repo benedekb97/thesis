@@ -7,7 +7,7 @@ namespace Database\Migrations;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema as Schema;
 
-class Version20211023115447 extends AbstractMigration
+class Version20211023121840 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -16,7 +16,7 @@ class Version20211023115447 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE machines ADD active TINYINT(1) DEFAULT 0 NOT NULL');
+        $this->addSql('ALTER TABLE machines ADD current_stitch INT DEFAULT NULL');
     }
 
     /**
@@ -26,6 +26,6 @@ class Version20211023115447 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE machines DROP active');
+        $this->addSql('ALTER TABLE machines DROP current_stitch');
     }
 }
