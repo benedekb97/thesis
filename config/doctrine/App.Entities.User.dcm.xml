@@ -8,7 +8,14 @@
         </id>
 
         <field name="name" nullable="true"/>
+
+        <field name="email" nullable="true" unique="true"/>
+
         <field name="password" nullable="true"/>
+
+        <field name="apiToken" nullable="true" column="api_token" unique="true"/>
+
+        <field name="apiTokenExpiry" type="datetime" nullable="true" column="api_token_expiry"/>
 
         <field name="createdAt" type="datetime" nullable="true" column="created_at">
             <gedmo:timestampable on="create"/>
