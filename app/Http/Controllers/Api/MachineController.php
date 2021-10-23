@@ -7,6 +7,8 @@ namespace App\Http\Controllers\Api;
 use App\Entities\MachineInterface;
 use App\Factories\DesignFactory;
 use App\Factories\DesignFactoryInterface;
+use App\Generators\DST\SVGGenerator;
+use App\Generators\DST\SVGGeneratorInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Resolvers\RequestMachineResolver;
 use App\Http\Resolvers\RequestMachineResolverInterface;
@@ -32,19 +34,23 @@ class MachineController extends Controller
 
     private DSTParserInterface $dstParser;
 
+    private SVGGeneratorInterface $svgGenerator;
+
     public function __construct(
         EntityManager              $entityManager,
         MachineRepositoryInterface $machineRepository,
         ResponseFactory            $responseFactory,
         RequestMachineResolver     $requestMachineResolver,
         DesignFactory              $designFactory,
-        DSTParser                  $dstParser
+        DSTParser                  $dstParser,
+        SVGGenerator               $svgGenerator
     )
     {
         $this->machineRepository = $machineRepository;
         $this->requestMachineResolver = $requestMachineResolver;
         $this->designFactory = $designFactory;
         $this->dstParser = $dstParser;
+        $this->svgGenerator = $svgGenerator;
 
         parent::__construct($entityManager, $responseFactory);
     }
@@ -135,6 +141,10 @@ class MachineController extends Controller
         $dst = $this->dstParser->parse($design->getFile());
 
         $design->setStitches($dst->getStitches());
+
+        $design->setSVG(
+            $this->svgGenerator->generate($design, $dst)
+        );
 
         $machine->setDesign($design);
 

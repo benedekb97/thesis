@@ -20,4 +20,8 @@ interface DesignInterface extends
     public function getFile(): ?string;
 
     public function setFile(?string $file): void;
+
+    public function getSVG(): ?string;
+
+    public function setSVG(?string $svg): void;
 }

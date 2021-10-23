@@ -18,6 +18,8 @@ class Design implements DesignInterface
 
     private ?string $file = null;
 
+    private ?string $svg = null;
+
     public function getStitches(): ?array
     {
         return $this->stitches;
@@ -36,5 +38,15 @@ class Design implements DesignInterface
     public function setFile(?string $file): void
     {
         $this->file = $file;
+    }
+
+    public function getSVG(): ?string
+    {
+        return $this->svg;
+    }
+
+    public function setSVG(?string $svg): void
+    {
+        $this->svg = $svg;
     }
 }
