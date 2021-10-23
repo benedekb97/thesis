@@ -16,4 +16,8 @@ interface DesignInterface extends
     public function getStitches(): ?array;
 
     public function setStitches(?array $stitches): void;
+
+    public function getFile(): ?string;
+
+    public function setFile(?string $file): void;
 }

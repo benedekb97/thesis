@@ -26,6 +26,10 @@ interface MachineInterface extends ResourceInterface, TimestampableInterface
         6 => self::STATE_THREAD_BREAK,
     ];
 
+    public function setDesign(?DesignInterface $design): void;
+
+    public function getDesign(): ?DesignInterface;
+
     public function getState(): ?string;
 
     public function setState(?string $state): void;

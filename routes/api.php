@@ -18,3 +18,4 @@ Route::group(
 );
 
 Route::patch('status', [MachineController::class, 'status'])->name('status');
+Route::post('design', [MachineController::class, 'design'])->name('design');
