@@ -17,6 +17,10 @@ class Machine implements MachineInterface
 
     private ?string $state = null;
 
+    private bool $active = false;
+
+    private ?int $currentStitch = null;
+
     public function getDesign(): ?DesignInterface
     {
         return $this->design;
@@ -41,5 +45,30 @@ class Machine implements MachineInterface
         }
 
         $this->state = $state;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function activate(): void
+    {
+        $this->active = true;
+    }
+
+    public function deactivate(): void
+    {
+        $this->active = false;
+    }
+
+    public function getCurrentStitch(): ?int
+    {
+        return $this->currentStitch;
+    }
+
+    public function setCurrentStitch(?int $currentStitch): void
+    {
+        $this->currentStitch = $currentStitch;
     }
 }

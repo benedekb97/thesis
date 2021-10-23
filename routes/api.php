@@ -17,11 +17,4 @@ Route::group(
     }
 );
 
-Route::group(
-    [
-        'middleware' => 'machine',
-    ],
-    static function () {
-        Route::post('status', [MachineController::class, 'status'])->name('status');
-    }
-);
+Route::patch('status', [MachineController::class, 'status'])->name('status');

@@ -18,6 +18,14 @@
 
         <field name="state" nullable="true"/>
 
+        <field name="active" type="boolean">
+            <options>
+                <option name="default">0</option>
+            </options>
+        </field>
+
+        <field name="currentStitch" column="current_stitch" nullable="true" type="integer"/>
+
         <many-to-one field="design" target-entity="App\Entities\Design">
             <join-column name="design_id"/>
         </many-to-one>

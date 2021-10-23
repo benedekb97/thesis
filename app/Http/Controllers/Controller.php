@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Dropelikeit\LaravelJmsSerializer\ResponseFactory;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -15,9 +16,13 @@ class Controller extends BaseController
 
     protected EntityManagerInterface $entityManager;
 
+    protected ResponseFactory $responseFactory;
+
     public function __construct(
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        ResponseFactory $responseFactory
     ) {
         $this->entityManager = $entityManager;
+        $this->responseFactory = $responseFactory;
     }
 }

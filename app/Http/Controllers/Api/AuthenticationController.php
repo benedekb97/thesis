@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\UserRepositoryInterface;
 use Doctrine\ORM\EntityManager;
 use Illuminate\Hashing\HashManager;
+use Illuminate\Routing\ResponseFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +25,7 @@ class AuthenticationController extends Controller
 
     public function __construct(
         EntityManager $entityManager,
+        ResponseFactory $responseFactory,
         UserRepositoryInterface $userRepository,
         HashManager $hashManager,
         ApiTokenGenerator $apiTokenGenerator
@@ -32,7 +34,7 @@ class AuthenticationController extends Controller
         $this->hashManager = $hashManager;
         $this->apiTokenGenerator = $apiTokenGenerator;
 
-        parent::__construct($entityManager);
+        parent::__construct($entityManager, $responseFactory);
     }
 
     public function authenticate(Request $request): JsonResponse

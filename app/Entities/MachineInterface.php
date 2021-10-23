@@ -29,4 +29,14 @@ interface MachineInterface extends ResourceInterface, TimestampableInterface
     public function getState(): ?string;
 
     public function setState(?string $state): void;
+
+    public function isActive(): bool;
+
+    public function activate(): void;
+
+    public function deactivate(): void;
+
+    public function getCurrentStitch(): ?int;
+
+    public function setCurrentStitch(?int $currentStitch): void;
 }
