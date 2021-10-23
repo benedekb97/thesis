@@ -10,7 +10,7 @@ class ControlWordDecoder implements ControlWordDecoderInterface
 {
     public function decode(?Position $currentPosition, array $bytes): Position
     {
-        $positionDifference = $currentPosition ?? new Position();
+        $positionDifference = clone $currentPosition ?? new Position();
 
         foreach (self::MOVEMENT_BYTE_MAP as $index => $values) {
 
