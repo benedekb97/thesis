@@ -108,4 +108,9 @@ return [
 
     'password_timeout' => 10800,
 
+    'sch' => [
+        'client_id' => env('AUTH_SCH_CLIENT_ID'),
+        'client_key' => env('AUTH_SCH_CLIENT_KEY'),
+    ]
+
 ];

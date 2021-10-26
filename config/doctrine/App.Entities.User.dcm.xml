@@ -24,6 +24,8 @@
         <field name="updatedAt" type="datetime" nullable="true" column="updated_at">
             <gedmo:timestampable on="update"/>
         </field>
+
+        <field name="authSchInternalId" column="auth_sch_internal_id" nullable="true"/>
     </entity>
 
 </doctrine-mapping>

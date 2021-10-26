@@ -23,6 +23,8 @@ class User implements UserInterface
 
     private ?DateTimeInterface $apiTokenExpiry = null;
 
+    private ?string $authSchInternalId = null;
+
     public function getAuthIdentifierName(): string
     {
         return 'id';
@@ -91,5 +93,15 @@ class User implements UserInterface
     public function setApiTokenExpiry(?DateTimeInterface $apiTokenExpiry): void
     {
         $this->apiTokenExpiry = $apiTokenExpiry;
+    }
+
+    public function getAuthSchInternalId(): ?string
+    {
+        return $this->authSchInternalId;
+    }
+
+    public function setAuthSchInternalId(?string $authSchInternalId): void
+    {
+        $this->authSchInternalId = $authSchInternalId;
     }
 }

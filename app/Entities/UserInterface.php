@@ -31,4 +31,8 @@ interface UserInterface extends
     public function getApiTokenExpiry(): ?DateTimeInterface;
 
     public function setApiTokenExpiry(?DateTimeInterface $apiTokenExpiry): void;
+
+    public function getAuthSchInternalId(): ?string;
+
+    public function setAuthSchInternalId(?string $authSchInternalId): void;
 }

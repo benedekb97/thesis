@@ -4,21 +4,42 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Entities\Machine;
-use App\Entities\MachineInterface;
+use App\Entities\UserInterface;
+use Doctrine\ORM\EntityManager;
+use Dropelikeit\LaravelJmsSerializer\ResponseFactory;
+use Illuminate\Auth\AuthManager;
 use Symfony\Component\HttpFoundation\Request;
 
 class DashboardController extends Controller
 {
+    private AuthManager $authManager;
+
+    public function __construct(
+        EntityManager $entityManager,
+        ResponseFactory $responseFactory,
+        AuthManager $authManager
+    )
+    {
+        $this->authManager = $authManager;
+
+        parent::__construct($entityManager, $responseFactory);
+    }
+
     public function index(Request $request)
     {
-        $machine = new Machine();
+        /** @var UserInterface $user */
+        $user = $this->authManager->guard(config('auth.defaults.guard'))->user();
 
-        $machine->setState(MachineInterface::STATE_END);
+        return view(
+            'pages.index',
+            [
+                'user' => $user,
+            ]
+        );
+    }
 
-        $this->entityManager->persist($machine);
-        $this->entityManager->flush();
-
-        return view('pages.index');
+    public function profile()
+    {
+        return view('pages.profile');
     }
 }

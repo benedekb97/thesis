@@ -41,6 +41,16 @@ class AuthenticationController extends Controller
     {
         $user = $this->userRepository->findOneByEmail($request->get('email'));
 
+        if ($user->getPassword() === null) {
+            return new JsonResponse(
+                [
+                    'error' => 'Please set your password on your profile page!',
+                    'link' => route('profile'),
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
         $password = $request->get('password');
 
         if ($this->hashManager->check($password, $user->getPassword())) {
