@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Generators\DST;
+namespace App\Services\Generator\DST;
 
 use App\Entities\DesignInterface;
 use App\Entities\DST\DSTInterface;

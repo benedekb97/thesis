@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Decoder;
+namespace App\Services\Decoder;
 
 use App\Entities\DST\Position;
 

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Entities\UserInterface;
-use App\Factories\UserFactory;
-use App\Factories\UserFactoryInterface;
+use App\Services\Factory\UserFactory;
+use App\Services\Factory\UserFactoryInterface;
 use App\Http\Api\AuthSchApi;
 use App\Http\Api\AuthSchApiInterface;
 use App\Http\Api\Entity\ProfileInterface;
-use App\Repositories\UserRepositoryInterface;
+use App\Services\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManager;
 use Dropelikeit\LaravelJmsSerializer\ResponseFactory;
 use Illuminate\Auth\AuthManager;

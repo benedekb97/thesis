@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\Repositories\UserRepositoryInterface;
+use App\Services\Repository\UserRepositoryInterface;
 use Closure;
 use DateTime;
 use Symfony\Component\HttpFoundation\JsonResponse;

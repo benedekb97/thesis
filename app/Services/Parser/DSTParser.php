@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Parser;
+namespace App\Services\Parser;
 
-use App\Decoder\ControlWordDecoder;
-use App\Decoder\ControlWordDecoderInterface;
+use App\Services\Decoder\ControlWordDecoder;
+use App\Services\Decoder\ControlWordDecoderInterface;
 use App\Entities\DST\DST;
 use App\Entities\DST\DSTInterface;
 use App\Entities\DST\Position;

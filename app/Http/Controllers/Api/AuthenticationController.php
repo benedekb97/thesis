@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Generators\ApiTokenGenerator;
-use App\Generators\ApiTokenGeneratorInterface;
+use App\Services\Generator\ApiTokenGenerator;
+use App\Services\Generator\ApiTokenGeneratorInterface;
 use App\Http\Controllers\Controller;
-use App\Repositories\UserRepositoryInterface;
+use App\Services\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManager;
 use Dropelikeit\LaravelJmsSerializer\ResponseFactory;
 use Illuminate\Hashing\HashManager;

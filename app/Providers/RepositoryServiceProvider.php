@@ -6,8 +6,8 @@ namespace App\Providers;
 
 use App\Entities\Machine;
 use App\Entities\User;
-use App\Repositories\MachineRepository;
-use App\Repositories\UserRepository;
+use App\Services\Repository\MachineRepository;
+use App\Services\Repository\UserRepository;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 

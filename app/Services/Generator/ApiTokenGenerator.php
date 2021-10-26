@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Generators;
+namespace App\Services\Generator;
 
 use App\Entities\UserInterface;
 use DateTime;

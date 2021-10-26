@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Parser;
+namespace App\Services\Parser;
 
 use App\Entities\DST\DSTInterface;
 

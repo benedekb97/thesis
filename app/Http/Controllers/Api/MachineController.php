@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Entities\MachineInterface;
-use App\Factories\DesignFactory;
-use App\Factories\DesignFactoryInterface;
-use App\Generators\DST\SVGGenerator;
-use App\Generators\DST\SVGGeneratorInterface;
+use App\Services\Factory\DesignFactory;
+use App\Services\Factory\DesignFactoryInterface;
+use App\Services\Generator\DST\SVGGenerator;
+use App\Services\Generator\DST\SVGGeneratorInterface;
 use App\Http\Controllers\Controller;
-use App\Http\Resolvers\RequestMachineResolver;
-use App\Http\Resolvers\RequestMachineResolverInterface;
-use App\Parser\DSTParser;
-use App\Parser\DSTParserInterface;
-use App\Repositories\MachineRepositoryInterface;
+use App\Services\Resolver\ActiveMachineResolver;
+use App\Services\Resolver\ActiveMachineResolverInterface;
+use App\Services\Parser\DSTParser;
+use App\Services\Parser\DSTParserInterface;
+use App\Services\Repository\MachineRepositoryInterface;
 use Doctrine\ORM\EntityManager;
 use Dropelikeit\LaravelJmsSerializer\ResponseFactory;
 use Illuminate\Http\Request as UploadRequest;
@@ -22,13 +22,12 @@ use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function Symfony\Component\String\b;
 
 class MachineController extends Controller
 {
     private MachineRepositoryInterface $machineRepository;
 
-    private RequestMachineResolverInterface $requestMachineResolver;
+    private ActiveMachineResolverInterface $activeMachineResolver;
 
     private DesignFactoryInterface $designFactory;
 
@@ -40,14 +39,14 @@ class MachineController extends Controller
         EntityManager              $entityManager,
         MachineRepositoryInterface $machineRepository,
         ResponseFactory            $responseFactory,
-        RequestMachineResolver     $requestMachineResolver,
+        ActiveMachineResolver      $activeMachineResolver,
         DesignFactory              $designFactory,
         DSTParser                  $dstParser,
         SVGGenerator               $svgGenerator
     )
     {
         $this->machineRepository = $machineRepository;
-        $this->requestMachineResolver = $requestMachineResolver;
+        $this->activeMachineResolver = $activeMachineResolver;
         $this->designFactory = $designFactory;
         $this->dstParser = $dstParser;
         $this->svgGenerator = $svgGenerator;
@@ -69,12 +68,12 @@ class MachineController extends Controller
 
     public function status(Request $request): JsonResponse
     {
-        $machine = $this->requestMachineResolver->resolve($request);
+        $machine = $this->activeMachineResolver->resolve();
 
         if ($machine === null) {
             return new JsonResponse(
                 [
-                    'error' => 'Invalid machine ID.',
+                    'error' => 'No active machines.',
                 ],
                 Response::HTTP_BAD_REQUEST
             );
@@ -106,12 +105,12 @@ class MachineController extends Controller
 
     public function design(UploadRequest $request): JsonResponse
     {
-        $machine = $this->requestMachineResolver->resolve($request);
+        $machine = $this->activeMachineResolver->resolve($request);
 
         if ($machine === null) {
             return new JsonResponse(
                 [
-                    'error' => 'Invalid machine ID',
+                    'error' => 'No active machine.',
                 ],
                 Response::HTTP_BAD_REQUEST
             );
@@ -120,7 +119,7 @@ class MachineController extends Controller
         if (!$request->files->has('dst')) {
             return new JsonResponse(
                 [
-                    'error' => 'No DST uploaded',
+                    'error' => 'No DST uploaded.',
                 ],
                 Response::HTTP_BAD_REQUEST
             );
