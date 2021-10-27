@@ -2,7 +2,7 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping">
 
-    <entity name="App\Entities\Machine" repository-class="App\Repositories\MachineRepository" table="machines">
+    <entity name="App\Entities\Machine" repository-class="App\Services\Repository\MachineRepository" table="machines">
 
         <id name="id">
             <generator strategy="AUTO"/>
