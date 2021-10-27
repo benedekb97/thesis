@@ -6,7 +6,12 @@
         <title>@yield('title')</title>
     </head>
     <body>
-        @yield('content')
+        @include('layouts.partial.navbar')
+        <main>
+            <div class="container container-main">
+                @yield('content')
+            </div>
+        </main>
     </body>
     <script src="{{ asset('js/app.js') }}"></script>
 </html>

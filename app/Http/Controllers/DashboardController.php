@@ -27,13 +27,14 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-        /** @var UserInterface $user */
-        $user = $this->authManager->guard(config('auth.defaults.guard'))->user();
+//        /** @var UserInterface $user */
+//        $user = $this->authManager->guard(config('auth.defaults.guard'))->user();
+
 
         return view(
             'pages.index',
             [
-                'user' => $user,
+//                'user' => $user,
             ]
         );
     }

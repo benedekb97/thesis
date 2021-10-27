@@ -131,7 +131,7 @@ class AuthenticationController extends Controller
 
         $this->authManager->guard(config('auth.defaults.guard'))->login($user);
 
-        return new RedirectResponse(route('index'));
+        return redirect()->intended(route('index'));
     }
 
     public function logout(): RedirectResponse
