@@ -8,7 +8,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">Állapot</h5>
+                        Állapot
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped" style="margin-bottom:0;">
@@ -59,6 +59,14 @@
                         </table>
                     </div>
                 </div>
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header">Műveletek</div>
+                    <div class="list-group">
+                        <a class="list-group-item" href="{{ route('design.colors', ['design' => $machine->getDesign()->getId()]) }}">
+                            Színek szerkesztése
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="col-md-8">
                 @if(($design = $machine->getDesign()) === null)
@@ -66,7 +74,7 @@
                 @else
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title">Rajzolat</h5>
+                            Rajzolat
                         </div>
                         <div class="card-body">
                             <svg style="
@@ -82,10 +90,10 @@
                                  preserveAspectRatio="none"
                             >
                                 @foreach($design->getStitches() as $id => $color)
-                                    @if (array_key_exists($id, $design->getColors() ?? []))
-                                        <g id="color-{{ $id }}" stroke="{{ $design->getColors()[$id] }}">
+                                    @if (array_key_exists($id === '' ? 0 : $id, $design->getColors() ?? []))
+                                        <g id="color-{{ $id === '' ? 0 : $id }}" stroke="{{ $design->getColors()[$id === '' ? 0 : $id] }}">
                                     @else
-                                        <g id="color-{{ $id }}" stroke="rgb(0, 0, 0)">
+                                        <g id="color-{{ $id === '' ? 0 : $id }}" stroke="rgb(0, 0, 0)">
                                     @endif
 
                                     @foreach ($color as $stitchId => $stitch)
@@ -119,7 +127,12 @@
                                 @endif
 
                                 <g id="crosshair"
-                                   style="stroke-width:2; stroke:red"
+                                   style="stroke-width:2;
+                                   @if ($design->hasBackgroundColor())
+                                       stroke:rgba({{ 255 - $design->getBackgroundColor()['red'] }},{{ 255 - $design->getBackgroundColor()['green'] }},{{ 255 - $design->getBackgroundColor()['blue'] }},1);
+                                   @else
+                                       stroke:red;
+                                   @endif"
                                    transform="translate({{ $currentPosition[0][0] + abs($design->getHorizontalOffset()) + 5 }} {{ $currentPosition[0][1] + abs($design->getVerticalOffset()) + 5 }})">
                                     <line x1="0" x2="0" y1="3" y2="13"></line>
                                     <line x1="0" x2="0" y1="-3" y2="-13"></line>

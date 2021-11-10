@@ -89,6 +89,26 @@ class Design implements DesignInterface
         $this->backgroundColor = $backgroundColor;
     }
 
+    public function hasBackgroundColor(): bool
+    {
+        return isset($this->backgroundColor) &&
+            array_key_exists('red', $this->backgroundColor) &&
+            array_key_exists('green', $this->backgroundColor) &&
+            array_key_exists('blue', $this->backgroundColor);
+    }
+
+    public function getHexBackgroundColor(): ?string
+    {
+        return $this->hasBackgroundColor()
+            ? sprintf(
+                '#%s%s%s',
+                str_pad(dechex($this->backgroundColor['red']), 2, '0', STR_PAD_LEFT),
+                str_pad(dechex($this->backgroundColor['green']), 2, '0', STR_PAD_LEFT),
+                str_pad(dechex($this->backgroundColor['blue']), 2, '0', STR_PAD_LEFT)
+            )
+            : null;
+    }
+
     public function getColors(): ?array
     {
         return $this->colors;
@@ -97,6 +117,16 @@ class Design implements DesignInterface
     public function setColors(?array $colors): void
     {
         $this->colors = $colors;
+    }
+
+    public function hasColors(): bool
+    {
+        return isset($this->colors);
+    }
+
+    public function hasColor($colorId): bool
+    {
+        return $this->hasColors() && array_key_exists($colorId, $this->colors);
     }
 
     public function getCanvasWidth(): ?float

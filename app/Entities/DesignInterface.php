@@ -31,9 +31,17 @@ interface DesignInterface extends
 
     public function setBackgroundColor(?array $backgroundColor): void;
 
+    public function hasBackgroundColor(): bool;
+
+    public function getHexBackgroundColor(): ?string;
+
     public function getColors(): ?array;
 
     public function setColors(?array $colors): void;
+
+    public function hasColors(): bool;
+
+    public function hasColor($colorId): bool;
 
     public function getCanvasWidth(): ?float;
 
