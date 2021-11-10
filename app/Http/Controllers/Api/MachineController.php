@@ -213,6 +213,7 @@ class MachineController extends Controller
 
         $machine->setDesign($design);
 
+        $machine->setState(MachineInterface::STATE_MANUAL_STOP);
         $machine->setCurrentStitch(0);
         $machine->setSecondsRunning(0);
         $machine->setCurrentDesign(1);
