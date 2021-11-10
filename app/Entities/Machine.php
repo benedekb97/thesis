@@ -24,6 +24,10 @@ class Machine implements MachineInterface
 
     private ?int $secondsRunning = null;
 
+    private ?int $currentDesign = null;
+
+    private ?int $designCount = null;
+
     public function getDesign(): ?DesignInterface
     {
         return $this->design;
@@ -48,6 +52,13 @@ class Machine implements MachineInterface
         }
 
         $this->state = $state;
+    }
+
+    public function getStatus(): ?string
+    {
+        return isset($this->state)
+            ? self::STATE_STATUS_MAP[$this->state]
+            : null;
     }
 
     public function isActive(): bool
@@ -83,5 +94,25 @@ class Machine implements MachineInterface
     public function setSecondsRunning(?int $secondsRunning): void
     {
         $this->secondsRunning = $secondsRunning;
+    }
+
+    public function getCurrentDesign(): ?int
+    {
+        return $this->currentDesign;
+    }
+
+    public function setCurrentDesign(?int $currentDesign): void
+    {
+        $this->currentDesign = $currentDesign;
+    }
+
+    public function getDesignCount(): ?int
+    {
+        return $this->designCount;
+    }
+
+    public function setDesignCount(?int $designCount): void
+    {
+        $this->designCount = $designCount;
     }
 }

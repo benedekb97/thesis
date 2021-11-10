@@ -31,6 +31,8 @@
         </many-to-one>
 
         <field name="secondsRunning" column="seconds_running" nullable="true" type="integer"/>
+        <field name="currentDesign" column="current_design" type="integer" nullable="true"/>
+        <field name="designCount" column="design_count" type="integer" nullable="true"/>
 
     </entity>
 

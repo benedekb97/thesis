@@ -31,6 +31,16 @@ class ApiAuthentication
             return $next($request);
         }
 
+        if (!$request->headers->has('apiToken')) {
+            return new JsonResponse(
+                [
+                    'error' => 'Unauthenticated',
+                    'code' => Response::HTTP_UNAUTHORIZED,
+                ],
+                Response::HTTP_UNAUTHORIZED
+            );
+        }
+
         $user = $this->userRepository->findOneByApiToken($request->headers->get('apiToken'));
 
         if ($user === null || new DateTime() > $user->getApiTokenExpiry()) {

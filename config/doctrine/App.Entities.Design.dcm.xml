@@ -16,10 +16,14 @@
         </field>
 
         <field name="name" nullable="true"/>
-
         <field name="file" nullable="true"/>
-
         <field name="stitches" type="json" nullable="true"/>
+        <field name="backgroundColor" column="background_color" type="json" nullable="true"/>
+        <field name="colors" type="json" nullable="true"/>
+        <field name="canvasHeight" type="float" column="canvas_height" nullable="true"/>
+        <field name="canvasWidth" type="float" column="canvas_width" nullable="true"/>
+        <field name="horizontalOffset" type="float" column="horizontal_offset" nullable="true"/>
+        <field name="verticalOffset" type="float" column="vertical_offset" nullable="true"/>
     </entity>
 
 </doctrine-mapping>

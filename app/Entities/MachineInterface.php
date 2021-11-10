@@ -16,6 +16,15 @@ interface MachineInterface extends ResourceInterface, TimestampableInterface
     public const STATE_AUTOMATIC_STOP = 'automatic_stop';
     public const STATE_THREAD_BREAK = 'thread_break';
 
+    public const STATE_STATUS_MAP = [
+        self::STATE_RUNNING => 'Fut',
+        self::STATE_END => 'Vége',
+        self::STATE_MACHINE_ERROR => 'Géphiba',
+        self::STATE_MANUAL_STOP => 'Megállítva',
+        self::STATE_AUTOMATIC_STOP => 'Előre beállított stop',
+        self::STATE_THREAD_BREAK => 'Szálszakadás',
+    ];
+
     public const STATE_MACHINE_CODE_MAP = [
         0 => self::STATE_END,
         1 => self::STATE_RUNNING,
@@ -47,4 +56,12 @@ interface MachineInterface extends ResourceInterface, TimestampableInterface
     public function getSecondsRunning(): ?int;
 
     public function setSecondsRunning(?int $secondsRunning): void;
+
+    public function getCurrentDesign(): ?int;
+
+    public function setCurrentDesign(?int $currentDesign): void;
+
+    public function getDesignCount(): ?int;
+
+    public function setDesignCount(?int $designCount): void;
 }

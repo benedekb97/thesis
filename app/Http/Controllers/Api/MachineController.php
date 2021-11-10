@@ -105,7 +105,7 @@ class MachineController extends Controller
 
     public function design(UploadRequest $request): JsonResponse
     {
-        $machine = $this->activeMachineResolver->resolve($request);
+        $machine = $this->activeMachineResolver->resolve();
 
         if ($machine === null) {
             return new JsonResponse(
@@ -144,6 +144,12 @@ class MachineController extends Controller
         $design->setSVG(
             $this->svgGenerator->generate($design, $dst)
         );
+
+        $design->setCanvasHeight($dst->getCanvasHeight());
+        $design->setCanvasWidth($dst->getCanvasWidth());
+
+        $design->setHorizontalOffset(($minPosition = $dst->getMinPosition())->getHorizontal());
+        $design->setVerticalOffset($minPosition->getVertical());
 
         $machine->setDesign($design);
 

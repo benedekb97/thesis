@@ -24,4 +24,30 @@ interface DesignInterface extends
     public function getSVG(): ?string;
 
     public function setSVG(?string $svg): void;
+
+    public function getStitchCount(): ?int;
+
+    public function getBackgroundColor(): ?array;
+
+    public function setBackgroundColor(?array $backgroundColor): void;
+
+    public function getColors(): ?array;
+
+    public function setColors(?array $colors): void;
+
+    public function getCanvasWidth(): ?float;
+
+    public function setCanvasWidth(?float $canvasWidth): void;
+
+    public function getCanvasHeight(): ?float;
+
+    public function setCanvasHeight(?float $canvasHeight): void;
+
+    public function getHorizontalOffset(): ?float;
+
+    public function setHorizontalOffset(?float $horizontalOffset): void;
+
+    public function getVerticalOffset(): ?float;
+
+    public function setVerticalOffset(?float $verticalOffset): void;
 }
