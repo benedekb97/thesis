@@ -6,6 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^7.4|^8.0",
+        "ext-http": "*",
+        "ext-json": "*",
         "doctrine/dbal": "^2.9",
         "doctrine/inflector": "^1.4|^2.0",
         "dropelikeit/laravel-jms-serializer": "^2.2",
@@ -18,8 +20,7 @@
         "laravel/framework": "^8.65",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "ext-json": "*",
-        "ext-http": "*"
+        "pusher/pusher-php-server": "^7.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

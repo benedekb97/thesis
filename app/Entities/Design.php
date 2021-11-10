@@ -7,6 +7,7 @@ namespace App\Entities;
 use App\Entities\Traits\NameableTrait;
 use App\Entities\Traits\ResourceTrait;
 use App\Entities\Traits\TimestampableTrait;
+use Illuminate\Support\Arr;
 
 class Design implements DesignInterface
 {
@@ -136,5 +137,10 @@ class Design implements DesignInterface
     public function setVerticalOffset(?float $verticalOffset): void
     {
         $this->verticalOffset = $verticalOffset;
+    }
+
+    public function getSquashedStitches(): array
+    {
+        return Arr::flatten($this->stitches, 1);
     }
 }

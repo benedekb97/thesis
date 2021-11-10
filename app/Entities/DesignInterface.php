@@ -50,4 +50,6 @@ interface DesignInterface extends
     public function getVerticalOffset(): ?float;
 
     public function setVerticalOffset(?float $verticalOffset): void;
+
+    public function getSquashedStitches(): array;
 }

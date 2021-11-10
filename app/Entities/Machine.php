@@ -115,4 +115,38 @@ class Machine implements MachineInterface
     {
         $this->designCount = $designCount;
     }
+
+    public function isRunning(): bool
+    {
+        return in_array($this->state, self::RUNNING_STATES);
+    }
+
+    public function isStopped(): bool
+    {
+        return in_array($this->state, self::STOPPED_STATES);
+    }
+
+    public function getProgressBarStyle(): ?string
+    {
+        return isset($this->state)
+            ? self::STATE_PROGRESS_BAR_MAP[$this->state]
+            : null;
+    }
+
+    public function getStitchProgressBarPercentage(): ?float
+    {
+        return isset($this->design)
+            ? ($this->currentStitch / $this->design->getStitchCount()) * 100
+            : 0;
+    }
+
+    public function getFinishedDesignsProgressBarPercentage(): float
+    {
+        return (($this->currentDesign - 1) / $this->designCount) * 100 ?? 100.0;
+    }
+
+    public function getCurrentDesignProgressBarPercentage(): float
+    {
+        return (1 / $this->designCount) * 100 ?? 0.0;
+    }
 }

@@ -4,25 +4,57 @@
 
 @section('content')
     @isset($machine)
-        <div class="row">
+        <div class="row" style="margin-top:50px;">
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Állapot</h5>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table class="table table-striped" style="margin-bottom:0;">
                             <tr>
                                 <td style="text-align:right;">Állapot</td>
-                                <td>{{ $machine->getStatus() }}</td>
+                                <td id="machine-state">{{ $machine->getStatus() }}</td>
                             </tr>
                             <tr>
                                 <td style="text-align:right;">Öltés</td>
-                                <td>{{ $machine->getCurrentStitch() ?? 0 }}/{{ $machine->getDesign()->getStitchCount() }}</td>
+                                <td>
+                                    <span id="machine-current-stitch">{{ $machine->getCurrentStitch() ?? 0 }}</span>/{{ $machine->getDesign()->getStitchCount() }}</td>
                             </tr>
                             <tr>
                                 <td style="text-align:right">Minta</td>
-                                <td>{{ $machine->getCurrentDesign() ?? 0 }}/{{ $machine->getDesignCount() ?? 0 }}</td>
+                                <td><span id="machine-current-design">{{ $machine->getCurrentDesign() ?? 0 }}</span>/<span id="machine-design-count">{{ $machine->getDesignCount() ?? 0 }}</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="progress" style="margin-bottom:0;">
+                                        <div id="machine-stitches-progress"
+                                             class="progress-bar progress-bar-striped {{ $machine->getProgressBarStyle() }}"
+                                             style="width:{{ $machine->getStitchProgressBarPercentage() }}%; text-align:center;">
+                                            {{ round($machine->getStitchProgressBarPercentage(), 2) }}%
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="progress" style="margin-bottom:0; text-align:center;">
+                                        <div id="machine-designs-finished-progress"
+                                             class="progress-bar"
+                                             style="width:{{ $finishedDesignsPercentage = $machine->getFinishedDesignsProgressBarPercentage() }}%; text-align:center;">
+                                            {{ $machine->getCurrentDesign() - 1 }}
+                                        </div>
+                                        <div id="machine-designs-current-progress"
+                                             class="progress-bar progress-bar-animated bg-warning progress-bar-striped"
+                                             style="width: {{ $currentDesignsPercentage = $machine->getCurrentDesignProgressBarPercentage() }}%; text-align:center;">
+                                            Aktuális
+                                        </div>
+                                        <div id="machine-designs-remaining"
+                                             style="width: {{ 100 - $machine->getFinishedDesignsProgressBarPercentage() - $machine->getCurrentDesignProgressBarPercentage() }}%">
+                                            @if(($remaining = $machine->getDesignCount() - $machine->getCurrentDesign()) !== 0){{ $remaining }}@endif
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -82,7 +114,7 @@
 
                                 @if(!isset($currentPosition))
                                     @php
-                                        $currentPosition = $design->getStitches()[1][0];
+                                        $currentPosition = \Illuminate\Support\Arr::first($design->getStitches())[0];
                                     @endphp
                                 @endif
 
@@ -102,3 +134,69 @@
         </div>
     @endisset
 @endsection
+
+@push('scripts')
+    @isset($machine)
+    <script>
+        let currentStitch = {{ $machine->getCurrentStitch() }};
+        @isset($design)
+            let totalStitches = {{ $design->getStitchCount() }};
+        @else
+            let totalStitches = 0;
+        @endisset
+
+        window.Echo.private('machine-update')
+            .listen('MachineStatusUpdateEvent', (e) => {
+                $('#machine-state').html(e.status);
+                $('#machine-current-design').html(e.currentDesign);
+                $('#machine-current-stitch').html(e.currentStitch);
+                $('#machine-design-count').html(e.designCount);
+                $('#crosshair').attr('transform', `translate(${e.crosshairPosition.horizontal} ${e.crosshairPosition.vertical})`);
+                let progressBar = $('#machine-stitches-progress');
+
+                progressBar.css('width', `${e.stitchProgressBarPercentage}%`);
+                progressBar.html(`${e.stitchProgressBarPercentage}%`);
+
+                progressBar.attr('class', `progress-bar progress-bar-striped ${e.progressBarStyle}`);
+
+                $('#machine-designs-current-progress').css('width', `${e.currentDesignProgressBarPercentage}%`);
+
+                let finishedDesignsProgressBar = $('#machine-designs-finished-progress');
+
+                finishedDesignsProgressBar.css('width', `${e.finishedDesignsProgressBarPercentage}%`);
+                finishedDesignsProgressBar.html(e.currentDesign - 1);
+
+                let remainingProgressBarPercentage = 100 - e.finishedDesignsProgressBarPercentage - e.currentDesignProgressBarPercentage;
+
+                $('#machine-designs-remaining').html(
+                    (e.currentDesign === e.designCount)
+                        ? ''
+                        : e.designCount - e.currentDesign
+                ).css('width', `${remainingProgressBarPercentage}%`);
+
+
+                if (currentStitch < e.currentStitch) {
+                    for (let i = currentStitch; i <= e.currentStitch; i++) {
+                        $(`#stitch-${i}`).css('opacity', 1);
+                    }
+
+                    for(let i = e.currentStitch; i < totalStitches; i++) {
+                        $(`#stitch-${i}`).css('opacity', 0.2);
+                    }
+                }
+
+                if (currentStitch > e.currentStitch) {
+                    for (let i = currentStitch; i >= e.currentStitch; i--) {
+                        $(`#stitch-${i}`).css('opacity', 0.2);
+                    }
+                }
+
+                currentStitch = e.currentStitch;
+            })
+            .listen('MachineDesignUpdateEvent', (e) => {
+                location.reload();
+            })
+
+    </script>
+    @endisset
+@endpush

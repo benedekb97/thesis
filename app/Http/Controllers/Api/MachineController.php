@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Entities\DesignInterface;
 use App\Entities\MachineInterface;
+use App\Events\MachineDesignUpdateEvent;
+use App\Events\MachineStatusUpdateEvent;
 use App\Services\Factory\DesignFactory;
 use App\Services\Factory\DesignFactoryInterface;
 use App\Services\Generator\DST\SVGGenerator;
@@ -17,6 +19,8 @@ use App\Services\Resolver\ActiveMachineResolverInterface;
 use App\Services\Parser\DSTParser;
 use App\Services\Parser\DSTParserInterface;
 use App\Services\Repository\MachineRepositoryInterface;
+use DateInterval;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Dropelikeit\LaravelJmsSerializer\ResponseFactory;
 use Illuminate\Http\Request as UploadRequest;
@@ -86,8 +90,19 @@ class MachineController extends Controller
             );
         }
 
+        if ($machine->getDesign() === null) {
+            return new JsonResponse(
+                [
+                    'error' => 'No design loaded in machine.',
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
         $state = (int)$request->get('state');
-        $currentStitch = $request->get('currentStitch');
+        $currentStitch = min($request->get('currentStitch'), $machine->getDesign()->getStitchCount());
+        $designCount = max($request->get('designCount'), 1);
+        $currentDesign = max(min($request->get('currentDesign'), $designCount), 1);
 
         if (!array_key_exists($state, MachineInterface::STATE_MACHINE_CODE_MAP)) {
             return new JsonResponse(
@@ -98,11 +113,35 @@ class MachineController extends Controller
             );
         }
 
+        $stopped = $machine->isStopped();
+
         $machine->setState(MachineInterface::STATE_MACHINE_CODE_MAP[$state]);
         $machine->setCurrentStitch($currentStitch);
+        $machine->setDesignCount($designCount);
+        $machine->setCurrentDesign($currentDesign);
+
+        $running = $machine->isRunning();
+
+        if ($stopped && $running) {
+            $machine->setSecondsRunning(0);
+        }
+
+        if (!$stopped && $running) {
+            $timeDifference = (new DateTime())->diff($machine->getUpdatedAt() ?? new DateTime());
+
+            $machine->setSecondsRunning(
+                $machine->getSecondsRunning() + (int)$timeDifference->format('s')
+            );
+        }
+
+        if (!$running) {
+            $machine->setSecondsRunning(0);
+        }
 
         $this->entityManager->persist($machine);
         $this->entityManager->flush();
+
+        MachineStatusUpdateEvent::dispatch($machine);
 
         return new JsonResponse(
             [],
@@ -174,9 +213,16 @@ class MachineController extends Controller
 
         $machine->setDesign($design);
 
+        $machine->setCurrentStitch(0);
+        $machine->setSecondsRunning(0);
+        $machine->setCurrentDesign(1);
+        $machine->setDesignCount(1);
+
         $this->entityManager->persist($design);
         $this->entityManager->persist($machine);
         $this->entityManager->flush();
+
+        MachineDesignUpdateEvent::dispatch();
 
         return new JsonResponse(
             [],

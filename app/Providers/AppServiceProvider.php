@@ -13,12 +13,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\View;
+use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
-    private AuthManager $authManager;
-
-    private ViewFactory $viewFactory;
+    private ?ViewFactory $viewFactory;
 
     private Router $router;
 
@@ -26,8 +25,12 @@ class AppServiceProvider extends ServiceProvider
         Application $app
     )
     {
-        $this->authManager = $app['auth'];
-        $this->viewFactory = $app['view'];
+        try {
+            $this->viewFactory = $app['view'];
+        } catch (Throwable $exception) {
+            // DO not share view
+        }
+
         $this->router = $app['router'];
 
         parent::__construct($app);
@@ -50,13 +53,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->viewFactory->composer(
-            '*',
-            function (View $view) {
-                $view->with('user', Auth::user());
-            }
-        );
+        if (isset($this->viewFactory)) {
+            $this->viewFactory->composer(
+                '*',
+                function (View $view) {
+                    $view->with('user', Auth::user());
+                }
+            );
 
-        $this->viewFactory->share('router', $this->router);
+            $this->viewFactory->share('router', $this->router);
+        }
     }
 }
