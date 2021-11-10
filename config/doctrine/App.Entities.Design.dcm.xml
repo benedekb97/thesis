@@ -24,6 +24,7 @@
         <field name="canvasWidth" type="float" column="canvas_width" nullable="true"/>
         <field name="horizontalOffset" type="float" column="horizontal_offset" nullable="true"/>
         <field name="verticalOffset" type="float" column="vertical_offset" nullable="true"/>
+        <field name="svg" nullable="true"/>
     </entity>
 
 </doctrine-mapping>

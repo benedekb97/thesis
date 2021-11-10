@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Entities\Design;
 use App\Entities\Machine;
 use App\Entities\User;
+use App\Services\Repository\DesignRepository;
 use App\Services\Repository\MachineRepository;
 use App\Services\Repository\UserRepository;
 use Illuminate\Foundation\Application;
@@ -16,6 +18,7 @@ class RepositoryServiceProvider extends ServiceProvider
     private const ENTITY_REPOSITORY_MAP = [
         User::class => UserRepository::class,
         Machine::class => MachineRepository::class,
+        Design::class => DesignRepository::class,
     ];
 
     public function register(): void

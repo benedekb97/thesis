@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use App\Entities\DesignInterface;
 use App\Entities\MachineInterface;
 use App\Services\Factory\DesignFactory;
 use App\Services\Factory\DesignFactoryInterface;
 use App\Services\Generator\DST\SVGGenerator;
 use App\Services\Generator\DST\SVGGeneratorInterface;
 use App\Http\Controllers\Controller;
+use App\Services\Repository\DesignRepositoryInterface;
 use App\Services\Resolver\ActiveMachineResolver;
 use App\Services\Resolver\ActiveMachineResolverInterface;
 use App\Services\Parser\DSTParser;
@@ -19,6 +21,7 @@ use Doctrine\ORM\EntityManager;
 use Dropelikeit\LaravelJmsSerializer\ResponseFactory;
 use Illuminate\Http\Request as UploadRequest;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +38,8 @@ class MachineController extends Controller
 
     private SVGGeneratorInterface $svgGenerator;
 
+    private DesignRepositoryInterface $designRepository;
+
     public function __construct(
         EntityManager              $entityManager,
         MachineRepositoryInterface $machineRepository,
@@ -42,7 +47,8 @@ class MachineController extends Controller
         ActiveMachineResolver      $activeMachineResolver,
         DesignFactory              $designFactory,
         DSTParser                  $dstParser,
-        SVGGenerator               $svgGenerator
+        SVGGenerator               $svgGenerator,
+        DesignRepositoryInterface  $designRepository
     )
     {
         $this->machineRepository = $machineRepository;
@@ -50,6 +56,7 @@ class MachineController extends Controller
         $this->designFactory = $designFactory;
         $this->dstParser = $dstParser;
         $this->svgGenerator = $svgGenerator;
+        $this->designRepository = $designRepository;
 
         parent::__construct($entityManager, $responseFactory);
     }
@@ -130,16 +137,30 @@ class MachineController extends Controller
 
         $dst->storeAs('designs', $fileName = (date('YmdHis') . '.dst'));
 
-        $design = $this->designFactory->createNew();
+        $filePath = sprintf('designs/%s', $fileName);
 
-        $design->setName('Machine design');
-        $design->setFile(
-            sprintf('designs/%s', $fileName)
+        $dst = $this->dstParser->parse($filePath);
+
+        $designs = $this->designRepository->findAll();
+
+        $design = Arr::first(
+            array_filter(
+                $designs,
+                static function (DesignInterface $design) use ($dst): bool
+                {
+                    return json_encode($design->getStitches()) === json_encode($dst->getStitches());
+                }
+            )
         );
 
-        $dst = $this->dstParser->parse($design->getFile());
+        if ($design === null) {
+            $design = $this->designFactory->createNew();
 
-        $design->setStitches($dst->getStitches());
+            $design->setName('Machine design');
+            $design->setStitches($dst->getStitches());
+        }
+
+        $design->setFile($filePath);
 
         $design->setSVG(
             $this->svgGenerator->generate($design, $dst)
