@@ -30,6 +30,8 @@
             <join-column name="design_id"/>
         </many-to-one>
 
+        <field name="secondsRunning" column="seconds_running" nullable="true" type="integer"/>
+
     </entity>
 
 </doctrine-mapping>

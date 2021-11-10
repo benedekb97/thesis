@@ -43,4 +43,8 @@ interface MachineInterface extends ResourceInterface, TimestampableInterface
     public function getCurrentStitch(): ?int;
 
     public function setCurrentStitch(?int $currentStitch): void;
+
+    public function getSecondsRunning(): ?int;
+
+    public function setSecondsRunning(?int $secondsRunning): void;
 }

@@ -24,6 +24,8 @@ interface UserInterface extends
 
     public function setPassword(?string $password): void;
 
+    public function hasPassword(): bool;
+
     public function getApiToken(): ?string;
 
     public function setApiToken(?string $apiToken): void;

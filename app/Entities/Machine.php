@@ -6,6 +6,7 @@ namespace App\Entities;
 
 use App\Entities\Traits\ResourceTrait;
 use App\Entities\Traits\TimestampableTrait;
+use DateTimeInterface;
 use LogicException;
 
 class Machine implements MachineInterface
@@ -20,6 +21,8 @@ class Machine implements MachineInterface
     private bool $active = false;
 
     private ?int $currentStitch = null;
+
+    private ?int $secondsRunning = null;
 
     public function getDesign(): ?DesignInterface
     {
@@ -70,5 +73,15 @@ class Machine implements MachineInterface
     public function setCurrentStitch(?int $currentStitch): void
     {
         $this->currentStitch = $currentStitch;
+    }
+
+    public function getSecondsRunning(): ?int
+    {
+        return $this->secondsRunning;
+    }
+
+    public function setSecondsRunning(?int $secondsRunning): void
+    {
+        $this->secondsRunning = $secondsRunning;
     }
 }

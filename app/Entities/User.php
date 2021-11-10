@@ -75,6 +75,11 @@ class User implements UserInterface
         $this->password = $password;
     }
 
+    public function hasPassword(): bool
+    {
+        return isset($this->password);
+    }
+
     public function getApiToken(): ?string
     {
         return $this->apiToken;

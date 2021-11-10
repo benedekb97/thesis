@@ -25,6 +25,8 @@ Route::group(
     ],
     static function () {
         Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
+
+        Route::post('profile/password', [DashboardController::class, 'password'])->name('profile.password');
     }
 );
 
