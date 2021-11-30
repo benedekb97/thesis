@@ -85,6 +85,9 @@ class DashboardController extends Controller
                     $this->hashManager->make($password)
                 );
 
+                $user->setApiTokenExpiry(null);
+                $user->setApiToken(null);
+
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 
@@ -100,6 +103,9 @@ class DashboardController extends Controller
                 $user->setPassword(
                     $this->hashManager->make($password)
                 );
+
+                $user->setApiToken(null);
+                $user->setApiTokenExpiry(null);
 
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();

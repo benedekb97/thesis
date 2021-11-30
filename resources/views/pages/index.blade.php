@@ -59,7 +59,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="card" style="margin-top:20px;">
+                <div class="card" style="margin-top:20px; margin-bottom: 20px;">
                     <div class="card-header">Műveletek</div>
                     <div class="list-group">
                         <a class="list-group-item" href="{{ route('design.colors', ['design' => $machine->getDesign()->getId()]) }}">

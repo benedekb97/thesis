@@ -13,7 +13,7 @@
                         @foreach ($design->getStitches() as $id => $color)
                             <div class="input-group" style="margin-bottom:5px;">
                                 <label class="input-group-text" for="color-{{ $id === '' ? 0 : $id }}">{{ $id === '' ? 1 : $id + 1 }}. szín</label>
-                                <input value="{{ $design->getColors()[$id === '' ? 0 : $id] }}" class="form-control-color" type="color" name="color-{{ $id === '' ? 0 : $id }}" id="color-{{ $id === '' ? 0 : $id }}">
+                                <input @if ($design->hasColors() && $design->hasColor($id === '' ? 0 : $id)) value="{{ $design->getColors()[$id === '' ? 0 : $id] }}" @endif class="form-control-color" type="color" name="color-{{ $id === '' ? 0 : $id }}" id="color-{{ $id === '' ? 0 : $id }}">
                             </div>
                         @endforeach
                     </div>

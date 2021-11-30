@@ -40,19 +40,4 @@
         </div>
     </nav>
 
-    <nav class="container d-flex flex-column flex-md-row justify-content-between">
-        <a class="py-2" href="{{ route('index') }}" aria-label="Home">
-            Home
-        </a>
-        @isset($user)
-            <a class="py-2" href="{{ route('auth.logout') }}" aria-label="Log out">
-                Log out
-            </a>
-        @else
-            <a class="py-2" href="{{ route('auth.redirect') }}" aria-label="Log in">
-                Log in
-            </a>
-        @endisset
-    </nav>
-
 </header>

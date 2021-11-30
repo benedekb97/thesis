@@ -52,10 +52,10 @@ interface MachineInterface extends ResourceInterface, TimestampableInterface
     ];
 
     public const STATE_MACHINE_CODE_MAP = [
-        0 => self::STATE_END,
-        1 => self::STATE_RUNNING,
+        0 => self::STATE_RUNNING,
+        1 => self::STATE_END,
         2 => self::STATE_MACHINE_ERROR,
-        3 => self::STATE_RUNNING,
+        3 => self::STATE_END,
         4 => self::STATE_MANUAL_STOP,
         5 => self::STATE_AUTOMATIC_STOP,
         6 => self::STATE_THREAD_BREAK,
